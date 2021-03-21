@@ -7,7 +7,7 @@ word_dict= {'A':11,'B':12,'C':13,'D':14,'E':15,'F':16,'G':17,'H':18,'I':19,'J':2
 
 word_dict.update(number_dict)
 
-def encrypt(plain_text,key):
+def encrypt_subs(plain_text,key):
     pt_len = len(plain_text)
     key_len = len(key)
     string = ""
@@ -18,7 +18,6 @@ def encrypt(plain_text,key):
         val1 = word_dict[plain_text[i]]
         val2 = word_dict[key[c]]
         avg_val = (val1+val2)/2
-        print(val1,val2,avg_val)
         check_val = math.ceil(avg_val) - math.floor(avg_val)
         if(check_val):
             string += '$'+ str(list(word_dict.keys())[list(word_dict.values()).index(math.floor(avg_val))])+ str(list(word_dict.keys())[list(word_dict.values()).index(math.ceil(avg_val))]) + '$'
@@ -26,7 +25,33 @@ def encrypt(plain_text,key):
             string +=  str(list(word_dict.keys())[list(word_dict.values()).index(math.floor(avg_val))])
         c= c+1
     return string
+
+def decrypt_subs(cipher_text,key):
+    cipher_len = len(cipher_text)
+    key_len = len(key)
+    c = 0
+    string = ""
+    i=0
+    while(i<cipher_len):
+        if(c%key_len == 0):
+            c=0
+        if(cipher_text[i] == '$'):
+            val1 = word_dict[cipher_text[i+1]]
+            val2 = word_dict[cipher_text[i+2]]
+            final_val = val1 + val2 - word_dict[key[c]]
+            string += str(list(word_dict.keys())[list(word_dict.values()).index(final_val)])
+            i=i+4
+        else:
+            val1 = 2*word_dict[cipher_text[i]]
+            final_val = val1 - word_dict[key[c]]
+            string += str(list(word_dict.keys())[list(word_dict.values()).index(final_val)])
+            i=i+1
+        c = c+1
+    return string
+    
 plain_text = str(input('Enter the plain text: '))
 key = str(input('Enter the key: '))
-print(encrypt(plain_text,key))
-print(word_dict)
+print(encrypt_subs(plain_text,key))
+cipher_text = str(input('Enter the cipher text: '))
+key = str(input('Enter the key: '))
+print("plain text:",decrypt_subs(cipher_text,key))
