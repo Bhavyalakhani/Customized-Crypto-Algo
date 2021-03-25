@@ -32,21 +32,25 @@ def decrypt_subs(cipher_text,key):
     c = 0
     string = ""
     i=0
-    while(i<cipher_len):
-        if(c%key_len == 0):
-            c=0
-        if(cipher_text[i] == '$'):
-            val1 = word_dict[cipher_text[i+1]]
-            val2 = word_dict[cipher_text[i+2]]
-            final_val = val1 + val2 - word_dict[key[c]]
-            string += str(list(word_dict.keys())[list(word_dict.values()).index(final_val)])
-            i=i+4
-        else:
-            val1 = 2*word_dict[cipher_text[i]]
-            final_val = val1 - word_dict[key[c]]
-            string += str(list(word_dict.keys())[list(word_dict.values()).index(final_val)])
-            i=i+1
-        c = c+1
+    try:   
+        while(i<cipher_len):
+            if(c%key_len == 0):
+                c=0
+            if(cipher_text[i] == '$'):
+                val1 = word_dict[cipher_text[i+1]]
+                val2 = word_dict[cipher_text[i+2]]
+                final_val = val1 + val2 - word_dict[key[c]]
+                string += str(list(word_dict.keys())[list(word_dict.values()).index(final_val)])
+                i=i+4
+            else:
+                val1 = 2*word_dict[cipher_text[i]]
+                final_val = val1 - word_dict[key[c]]
+                string += str(list(word_dict.keys())[list(word_dict.values()).index(final_val)])
+                i=i+1
+            c = c+1
+    except:
+        print('Access denied, Please enter the right key')
+        string = ""
     return string
     
 plain_text = str(input('Enter the plain text: '))
